@@ -4,10 +4,9 @@ INSERT INTO entries (
   amount
 ) VALUES (
   $1, $2
-)
-RETURNING *;
+) RETURNING *;
 
--- name: GetEntries :one
+-- name: GetEntry :one
 SELECT * FROM entries
 WHERE id = $1 LIMIT 1;
 

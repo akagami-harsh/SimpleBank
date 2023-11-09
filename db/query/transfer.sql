@@ -1,12 +1,11 @@
 -- name: CreateTransfer :one
 INSERT INTO transfers (
-  to_account_id,
   from_account_id,
+  to_account_id,
   amount
 ) VALUES (
   $1, $2, $3
-)
-RETURNING *;
+) RETURNING *;
 
 -- name: GetTransfer :one
 SELECT * FROM transfers
@@ -20,4 +19,3 @@ WHERE
 ORDER BY id
 LIMIT $3
 OFFSET $4;
-
