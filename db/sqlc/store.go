@@ -59,10 +59,10 @@ type TransferTxResults struct {
 func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResults, error) {
 	var result TransferTxResults
 
-	err := store.execTx(ctx, func(q *Queries) err {
+	err := store.execTx(ctx, func(q *Queries) error {
 		var err error
 
-		result.Transfer, err = q.CreateAccount(ctx, CreateTransferParams{
+		result.Transfer, err = q.CreateTransfer(ctx, CreateTransferParams{
 			FromAccountID: arg.FromAccountID,
 			ToAccountID:   arg.ToAccountID,
 			Amount:        arg.Amount,
@@ -79,7 +79,7 @@ func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (Trans
 			return err
 		}
 
-		result.ToEntry, err = q.Create(ctx, CreateEntryParams{
+		result.ToEntry, err = q.CreateEntry(ctx, CreateEntryParams{
 			AccountID: arg.ToAccountID,
 			Amount:    arg.Amount,
 		})
