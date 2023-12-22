@@ -28,7 +28,7 @@ type Transfer struct {
 	ID            int64
 	FromAccountID int64
 	ToAccountID   int64
-	// can be only positiver
+	// must be positive
 	Amount    int64
 	CreatedAt time.Time
 }
