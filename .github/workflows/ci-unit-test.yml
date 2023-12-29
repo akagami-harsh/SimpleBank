@@ -1,14 +1,17 @@
-name: Unit Test
+name: Make Test
 
-on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+on: [push]  # Trigger the workflow on push events
 
 jobs:
-    unit-test:
-        runs-on: ubuntu-latest
-        steps:
-        - name: Run unit tests
-          run: make test
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3 
+      - name: Set up Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install make  # Install Make if necessary
+          # (Add any other dependencies here)
+      - name: Run make test
+        run: make test
