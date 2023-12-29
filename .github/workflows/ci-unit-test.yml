@@ -13,8 +13,14 @@ jobs:
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: secret
+          POSTGRES_DB: simple_bank
         ports:
-          - 5432:5432
+          - 5433:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
@@ -28,10 +34,24 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y make
-      - name: Set up Database
+
+      - name: Wait for PostgreSQL to become available
+        run: |
+          until pg_isready -h localhost -p 5433; do
+            echo "Waiting for PostgreSQL to become available..."
+            sleep 2
+          done
+        env:
+          PGPASSWORD: secret
+
+      - name: Setup database and run tests
         run: |
             make createdb
             make migrateup
-
-      - name: Run make test
-        run: make test
+            make test
+        env:
+          POSTGRES_HOST: localhost
+          POSTGRES_PORT: 5433
+          POSTGRES_USER: root
+          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: simple_bank
