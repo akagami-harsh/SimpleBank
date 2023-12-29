@@ -28,7 +28,7 @@ jobs:
       - name: Set up Dependencies
         run: |
           sudo apt-get update
-          go get -tags 'postgres' -u github.com/golang-migrate/migrate/v4/cmd/migrate
+          sudo apt install migrate
 
       - name: Wait for PostgreSQL to become available
         run: |
