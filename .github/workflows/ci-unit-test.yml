@@ -10,31 +10,26 @@ jobs:
     services:
       postgres:
         image: postgres:16-alpine
-        container_name: postgres16
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: secret
-          POSTGRES_DB: simple_bank
-        ports:
-          - 5433:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - uses: actions/checkout@v3
 
+      - name: Run PostgreSQL command
+        run: docker run --name=postgres16 -e POSTGRES_USER=root -p 5433:5432 -e POSTGRES_PASSWORD=secret -d postgres:16-alpine
+
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.21.3' # Ensure this version number is correct
+          go-version: '1.21.3'
 
       - name: Set up Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y make
+          curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
+          sudo apt-get install migrate
 
       - name: Wait for PostgreSQL to become available
         run: |
