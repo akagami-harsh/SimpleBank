@@ -2,6 +2,9 @@ name: Unit Test
 
 on: [push]
 
+env:
+    PATH: $PATH:$GOPATH/bin
+    
 jobs:
   test:
     name: Run Unit Tests
@@ -29,6 +32,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y make
+          go get -tags 'postgres' -u github.com/golang-migrate/migrate/v4/cmd/migrate
 
       - name: Wait for PostgreSQL to become available
         run: |
@@ -38,10 +42,11 @@ jobs:
           done
         env:
           PGPASSWORD: secret
-    
+
       - name: Setup database and run tests
         run: |
             make createdb
+            make migrateup
             make test
         env:
           POSTGRES_HOST: localhost
