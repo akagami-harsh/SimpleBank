@@ -28,7 +28,8 @@ jobs:
       - name: Set up Dependencies
         run: |
           sudo apt-get update
-          sudo apt install migrate
+          curl -s https://packagecloud.io/install/repositories/golang-migrate/migrate/script.deb.sh | sudo bash
+          sudo apt-get install migrate
 
       - name: Wait for PostgreSQL to become available
         run: |
