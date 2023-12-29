@@ -1,6 +1,6 @@
-name: Make Test
+name: Unit Test
 
-on: [push]  # Trigger the workflow on push events
+on: [push]
 
 jobs:
   test:
