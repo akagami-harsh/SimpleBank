@@ -6,25 +6,24 @@ import (
 
 	"github.com/akagami-harsh/SimpleBank/api"
 	db "github.com/akagami-harsh/SimpleBank/db/sqlc"
+	"github.com/akagami-harsh/SimpleBank/util"
 	_ "github.com/lib/pq" // import postgres driver
 )
 
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:secret@localhost:5433/simple_bank?sslmode=disable"
-	serverAddress = "localhost:8080"
-)
-
 func main() {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
 	if err != nil {
-		log.Fatal("cannot connect to db:", err)
+		log.Fatal("cannot start server: ", err)
+	}
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		log.Fatal("cannot connect to db: ", err)
 	}
 
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
 	}
