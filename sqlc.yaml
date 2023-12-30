@@ -8,3 +8,4 @@ sql:
         package: "db"
         out: "./db/sqlc"
         sql_package: "databse/sql"
+        emit_empty_slices: true
