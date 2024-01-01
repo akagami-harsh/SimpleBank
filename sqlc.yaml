@@ -9,3 +9,4 @@ sql:
         out: "./db/sqlc"
         sql_package: "databse/sql"
         emit_empty_slices: true
+        emit_interface: true
